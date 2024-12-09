@@ -1,6 +1,6 @@
 import packageJson from '@/package.json';
 import { auth } from "@/auth";
-import MainLayout from './layouts/MainLayout';
+import MainLayout from './layouts/mainLayout';
 const APP_VERSION: string = packageJson.version;
 
 export default async function Home() {

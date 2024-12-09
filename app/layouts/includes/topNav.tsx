@@ -45,7 +45,7 @@ export default function TopNav({ user }: UserProps) {
           }`}
         >
           <Link className="flex items-center gap-2" href="/">
-           <Button className="w-10 h-10"> <BsHouses /> </Button> <h1 className="font-bold text-xl">toktok</h1>
+           <Button className="w-10 h-10"> <BsHouses /> </Button> <h1 className="font-bold text-xl">toctok</h1>
           </Link>
         </div>
 
@@ -63,12 +63,12 @@ export default function TopNav({ user }: UserProps) {
           <div className="p-1">
             <Link
                href={`/profile/1`}
-               className="flex items-center justify-between w-full cursor-pointer rounded-md hover:bg-primary text-muted-foreground p-1 px-2 hover:text-foreground"
+               className="flex items-center justify-between w-full cursor-pointer rounded-md hover:bg-primary/50 text-muted-foreground p-1 px-2 hover:text-foreground"
             >
               
               <div className="flex items-center">
                 <img className=" rounded-md" width={40} height={40} src="https://placehold.co/40" alt=""/>
-                <h1 className="truncate ml-2"> Profile 1 </h1>
+                <h1 className="truncate ml-2"> local </h1>
               </div>
             </Link>
           </div>

@@ -2,7 +2,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import TopNav from "./includes/topNav";
-import { Session } from "next-auth"; // Importe o tipo correto do `next-auth`
+import { Session } from "next-auth";
 import SideNavMain from "./includes/sideNaviMain";
 
 // Define o tipo das props do layout
@@ -14,20 +14,30 @@ type MainLayoutProps = {
 export default function MainLayout({ children, user }: MainLayoutProps) {
   const pathname = usePathname();
 
-  // Extrai o `id` do `user`, se disponível
+
   const userId = user?.user?.id ?? null;
 
   return (
     <>
-      {/* Passa o `userId` extraído para o TopNav */}
+
       <TopNav user={userId ? { id: userId } : null} />
       <div
         className={`flex justify-between mx-auto w-full lg:px-2.5 px-0 ${
           pathname === "/" ? "max-w-[1140px]" : ""
         }`}
       >
-        <SideNavMain user={userId ? { id: userId } : null} />
-        {children}
+
+        <div className="w-1/4 lg:w-1/5 ">
+          <SideNavMain user={userId ? { id: userId } : null} />
+        </div>
+
+
+        <div className="flex-1 px-4">
+          {children}
+        </div>
+
+
+        <div className="w-1/4 lg:w-1/5"></div>
       </div>
     </>
   );
