@@ -6,11 +6,6 @@
 
 export const publicRoutes = [
   "/", 
-  "/auth/new-verification",
-  "/api/uploadthing",
-  "/api/webhook",
-  "/api/webhook/stripe",
-  "/api/audio",
 ];
 /**
  * an array of routes that are used for authentication

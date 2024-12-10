@@ -49,7 +49,7 @@ export default function TopNav({ user }: UserProps) {
           </Link>
         </div>
 
-        <div className=" relative hidden md:flex items-center justify-end border border-muted rounded-full max-w-[430px] w-full ">
+        <div className=" relative hidden md:flex items-center justify-end border border-muted-foreground/20 rounded-full max-w-[430px] w-full mx-4">
           <Input
             type="text"
             onChange={handleSearchName}
@@ -59,7 +59,7 @@ export default function TopNav({ user }: UserProps) {
           <div className="px-3 py-1 flex items-center">
            <BiSearch className="text-muted-foreground" size="22" />
         </div>
-           <div className="absolute bg-muted max-w-[910px] h-auto w-full z-20 left-0 top-12 border p-1">
+           <div className="absolute hidden bg-muted max-w-[910px] h-auto w-full z-20 left-0 top-12 border p-1">
           <div className="p-1">
             <Link
                href={`/profile/1`}
@@ -76,10 +76,7 @@ export default function TopNav({ user }: UserProps) {
         </div>
 
         </div>
-       
-
-        <div className="flex w-full justify-between p-4 z-10">
-          
+        {userId ? ( 
         <div className="flex items-center gap-3">
           <Button 
           onClick={() => goTo()}
@@ -87,11 +84,15 @@ export default function TopNav({ user }: UserProps) {
           variant="outline"
           >
              <FaHouseChimneyMedical size="22"/>
-             <span className="px-2 font-medium text-[15px]">Upload</span>
+             <span className="px-2 font-medium text-[15px]">Novo</span>
           </Button>
         </div>
+        ) :(null)}
+
+        <div className="flex w-full justify-end p-4 z-10">
+      
           {!userId ? (
-            <div>
+            <div className="flex ">
               <LoginButton mode="modal" asChild>
                 <Button
                   className="w-40 bg-transparent border-primary mr-2"
@@ -102,7 +103,7 @@ export default function TopNav({ user }: UserProps) {
               </LoginButton>
               
               <RegisterButton mode="modal" asChild>
-                <Button className="w-40 bg-muted" variant={"secondary"}>
+                <Button className="w-40 bg-muted lg:block hidden" variant={"secondary"}>
                   Register
                 </Button>
               </RegisterButton>
