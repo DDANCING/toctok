@@ -18,7 +18,7 @@ export default function UploadLayout({ children, user }: UploadLayoutProps) {
 
   return (
     <>
-     <div className="bg-background h-[100vh]">
+     <div className="bg-background flex justify-between max-h-screen mx-auto w-full">
         <TopNav user={userId ? { id: userId } : null} /> 
         <div className="flex justify-between mx-auto w-full px-2 max-w-[1140px]">
           {children}
