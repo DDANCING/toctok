@@ -3,10 +3,14 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { IoVolumeMuteOutline, IoVolumeHighOutline, IoPlay, IoPause } from "react-icons/io5";
+import { Button } from "./ui/button";
+import PostMainPinned from "./post-main-Pinned";
+
 
 interface PostProps {
-  id: string;
-  userId: string;
+userId: string;
+ post: {
+  id: string; 
   video_url: string;
   text: string;
   created_at: Date;
@@ -15,17 +19,18 @@ interface PostProps {
     user_id: string;
     name: string;
     image: string;
+  }
   };
 }
 
-export default function PostMain({ id, profile, text, video_url }: PostProps) {
+export default function PostMain({ post }: PostProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isMutedGlobal, setIsMutedGlobal] = useState(true); // Global mute state
+  const [isMutedGlobal, setIsMutedGlobal] = useState(true); 
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState<"play" | "pause" | null>(null);
 
   useEffect(() => {
-    const video = document.getElementById(`video-${id}`) as HTMLVideoElement;
-    const postElement = document.getElementById(`PostMain-${id}`);
+    const video = document.getElementById(`video-${post.id}`) as HTMLVideoElement;
+    const postElement = document.getElementById(`PostMain-${post.id}`);
     if (postElement && video) {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -35,16 +40,16 @@ export default function PostMain({ id, profile, text, video_url }: PostProps) {
       );
       observer.observe(postElement);
 
-      return () => observer.disconnect(); // Clean up observer
+      return () => observer.disconnect(); 
     }
-  }, [id]);
+  }, [post.id]);
 
   const handleToggleText = () => {
     setIsExpanded(!isExpanded);
   };
 
   const handleVideoClick = () => {
-    const video = document.getElementById(`video-${id}`) as HTMLVideoElement;
+    const video = document.getElementById(`video-${post.id}`) as HTMLVideoElement;
     if (video) {
       if (video.paused) {
         video.play();
@@ -65,19 +70,20 @@ export default function PostMain({ id, profile, text, video_url }: PostProps) {
     setIsMutedGlobal(!isMutedGlobal);
   };
 
-  const truncatedText = text.length > 88 ? text.slice(0, 88) : text;
+  const truncatedText = post.text.length > 88 ? post.text.slice(0, 88) : post.text;
 
   return (
-    <div id={`PostMain-${id}`} className="flex flex-col items-center relative snap-start">
-      <div className="relative bg-black max-w-screen-sm h-[80vh] rounded-lg overflow-hidden my-4">
+    <div className="flex items-end relative justify-center ">
+    <div id={`PostMain-${post.id}`} className="flex flex-col items-center relative snap-start">
+      <div className="cursor-pointer relative bg-black max-w-screen-sm h-[80vh] rounded-lg overflow-hidden my-4">
         {/* Video Section */}
         <div
           onClick={handleVideoClick}
           className="relative cursor-pointer h-full flex items-center justify-center"
         >
           <video
-            id={`video-${id}`}
-            src={video_url}
+            id={`video-${post.id}`}
+            src={post.video_url}
             muted={isMutedGlobal}
             loop
             className="h-full object-cover"
@@ -103,31 +109,41 @@ export default function PostMain({ id, profile, text, video_url }: PostProps) {
           </button>
         </div>
         <div className="absolute bottom-4 left-4 z-10 text-white">
-          <Link href={`/profile/${profile.user_id}`}>
+          <div className="flex justify-between">
+          <Link href={`/profile/${post.profile.user_id}`}>
             <div className="flex items-center mb-2">
               <img
                 className="rounded-full w-10 h-10 object-cover border border-white"
-                src={profile.image}
-                alt={profile.name}
+                src={post.profile.image}
+                alt={post.profile.name}
               />
               <span className="ml-2 font-bold hover:underline">
-                {profile.name}
+                {post.profile.name}
               </span>
             </div>
           </Link>
+          <Button className="m-2 h-8 border text-[15px] px-[21px] py-0.5 hover:bg-primary/50 font-semibold hover:text-secondary" variant={"ghost"}>
+           seguir
+          </Button>
+          </div>
           <p className="text-sm text-zinc-300">
-            {isExpanded ? text : truncatedText}
-            {text.length > 88 && (
+            {isExpanded ? post.text : truncatedText}
+            {post.text.length > 88 && (
               <span
                 onClick={handleToggleText}
-                className="text-zinc-500 cursor-pointer ml-2"
+                className="text-zinc-300 cursor-pointer ml-2"
               >
                 {isExpanded ? "Ver menos" : "Ver mais"}
               </span>
             )}
           </p>
+          <p className="text-[14px] pb-0.5 flex items-center font-semibold text-zinc-200"> 
+            {post.locale}
+          </p>
         </div>
       </div>
+    </div>
+    <PostMainPinned post={post}/>
     </div>
   );
 }
