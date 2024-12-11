@@ -50,11 +50,11 @@ export default function PostMainPinned({ post }: PostProps) {
           <Button
             disabled={hasClickedPinned}
             onClick={pinnedOrUnpinned}
-            className="rounded-full bg-muted-foreground p-4 h-12"
+            className="rounded-full bg-muted-foreground/50 p-4 h-12"
           >
             {!hasClickedPinned ? (
               <FaMapPin
-                className={`${pins.some((pin) => pin.post_id === post.id) ? "text-foreground" : ""}`}
+                className={`${pins.some((pin) => pin.post_id === post.id) ? "text-foreground/50" : ""}`}
                 size={25}
               />
             ) : (
@@ -70,7 +70,7 @@ export default function PostMainPinned({ post }: PostProps) {
         <div className="pb-4 text-center">
         <Button
           onClick={() => router.push(`/post/${post.id}/${post.profile.user_id}`)}
-          className="rounded-full bg-muted-foreground p-4 h-12"
+          className="rounded-full bg-muted-foreground/50 p-4 h-12"
         >
           <div className="">
             <FaCommentDots size="25"/>
@@ -83,7 +83,7 @@ export default function PostMainPinned({ post }: PostProps) {
         <div className="pb-4 text-center">
         <Button
           onClick={() => router.push(`/post/${post.id}/${post.profile.user_id}`)}
-          className="rounded-full bg-muted-foreground p-4 h-12"
+          className="rounded-full bg-muted-foreground/50 p-4 h-12"
         >
           <div className="">
             <FaShare size="25"/>

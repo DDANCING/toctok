@@ -122,7 +122,7 @@ export default function PostMain({ post }: PostProps) {
               </span>
             </div>
           </Link>
-          <Button className="m-2 h-8 border text-[15px] px-[21px] py-0.5 border-primary/50 hover:bg-primary/50 font-semibold text-primary/50 hover:text-background" variant={"ghost"}>
+          <Button className="m-2 h-8 border text-[15px] px-[21px] py-0.5 hover:bg-primary/50 font-semibold hover:text-secondary" variant={"ghost"}>
            seguir
           </Button>
           </div>
@@ -131,7 +131,7 @@ export default function PostMain({ post }: PostProps) {
             {post.text.length > 88 && (
               <span
                 onClick={handleToggleText}
-                className="text-zinc-500 cursor-pointer ml-2"
+                className="text-zinc-300 cursor-pointer ml-2"
               >
                 {isExpanded ? "Ver menos" : "Ver mais"}
               </span>

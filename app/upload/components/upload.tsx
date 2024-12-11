@@ -3,11 +3,17 @@
 import { useState } from "react";
 import { BsFillHouseUpFill } from "react-icons/bs";
 import { BiLoader } from "react-icons/bi";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { Button } from "@/components/ui/button";
+import { MdContentCut } from "react-icons/md";
+import { Input } from "@/components/ui/input";
+
 
 export const Upload = () => {
   let [fileDisplay, setFileDisplay] = useState('');
   let [file, setFile] = useState<File | null>(null);
   let [isUploading, setIsUploading] = useState(false);
+  let [caption, setCaption] = useState(''); // Estado para a legenda
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -18,6 +24,11 @@ export const Upload = () => {
       setFileDisplay(fileUrl);
       setFile(file);
     }
+  };
+
+  const clearVideo = () => {
+    setFileDisplay('');
+    setFile(null);
   };
 
   return (
@@ -50,27 +61,75 @@ export const Upload = () => {
               <input type="file" id="fileInput" onChange={onChange} hidden accept=".mp4" />
             </label>
           ) : (
-            <div
-              className="md:mx-0 mx-auto mt-4 md:mb-12 mb-16 flex items-center justify-center w-full max-w-[260px] h-[470px] p-3 rounded-2xl cursor-pointer relative overflow-hidden bg-black"
-            >
-              {isUploading ? (
-                <div className="absolute flex items-center justify-center z-20 bg-black h-full w-full rounded-[50px] bg-opacity-50">
-                  <div className="mx-auto flex items-center justify-center gap-1">
-                    <BiLoader className="animate-spin text-primary" size={30} />
-                    <div className="text-secondary font-bold"> Carregando... </div>
+            <div>
+              <div
+                className="md:mx-0 mx-auto mt-4 md:mb-12 mb-16 flex flex-col items-center justify-center w-full max-w-[260px] h-[470px] p-3 rounded-2xl cursor-pointer relative overflow-hidden bg-black"
+              >
+                {isUploading ? (
+                  <div className="absolute flex flex-col items-center justify-center z-20 bg-black h-full w-full rounded-[50px] bg-opacity-50">
+                    <div className="mx-auto flex items-center justify-center gap-1">
+                      <BiLoader className="animate-spin text-primary" size={30} />
+                      <div className="text-secondary font-bold"> Carregando... </div>
+                    </div>
                   </div>
-                </div>
-              ) : null}
+                ) : null}
 
-              <video
-                autoPlay
-                loop
-                muted
-                className="absolute rounded-xl object-contain z-10 w-full h-full"
-                src={fileDisplay}
-              />
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  className="absolute rounded-xl object-contain z-10 w-full h-full"
+                  src={fileDisplay}
+                />
+              </div>
+
+              <div className="mt-4 h-10 text-primary flex items-center rounded-xl border bg-background/50 p-1">
+                <div className="flex items-center truncate">
+                  <AiOutlineCheckCircle size="16" className="min-w-[16px]" />
+                </div>
+                <p className="text-[11px] pl-1 truncate text-ellipsis"> 
+                  {file ? file.name : ""}
+                </p>
+                <Button className="text-[11px] h-7 m-1" onClick={() => clearVideo()} variant={"outline"}>
+                  Alterar
+                </Button>
+              </div>
             </div>
           )}
+          
+          <div className="mt-4 mb-6">
+            <div className="flex bg-muted py4 px-6 border p-1 shadow-xl">
+              <div>
+                <div>
+                  <div className="flex items-center gap-1 font-semibold text-[15px] mb-1.5">
+                    <MdContentCut /> <h1> Divida e edite o video </h1>
+                  </div>
+                  <div className="font-semibold text-[13px] text-muted-foreground">
+                    Você pode dividir vídeos rapidamente em várias partes, remover trechos redundantes e transformar vídeos em paisagem em vídeos no formato retrato.
+                  </div>
+                </div>
+                <div className="flex justify-start w-full h-full text-center my-auto">
+                  <Button className="text-[11px] h-7 m-1" variant={"outline"}>
+                    Edit
+                  </Button>
+                </div>
+              </div>
+              
+            </div>
+            <div className="mt-5">
+                <div className="flex items-center justify-between">
+                  <div className="mb-1 text-[15px]"> Legenda </div>
+                  <div className="text-muted-foreground text-[12px]"> {caption.length}/150 </div>
+                </div>
+                <Input
+                  type="text"
+                  maxLength={150}
+                  value={caption} 
+                  onChange={(e) => setCaption(e.target.value)} 
+                  className="w-full border p-2.5 rounded-md focus:outline-none"
+                />
+              </div>
+          </div>
         </div>
       </div>
     </>
