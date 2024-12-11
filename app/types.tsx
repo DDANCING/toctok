@@ -15,3 +15,7 @@ export interface UploadError {
   type: string;
   message: string;
 }
+export interface UploadError {
+  type: string;
+  message: string;
+}

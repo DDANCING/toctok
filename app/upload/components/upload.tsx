@@ -25,11 +25,21 @@ export const Upload = () => {
       setFile(file);
     }
   };
+  const discard = () => {
+    setFileDisplay('');
+    setFile(null);
+    setCaption('');
+  };
+
 
   const clearVideo = () => {
     setFileDisplay('');
     setFile(null);
   };
+
+  const createNewPost = () => {
+    console.log("createNewPost")
+  }
 
   return (
     <>
@@ -127,7 +137,25 @@ export const Upload = () => {
                   value={caption} 
                   onChange={(e) => setCaption(e.target.value)} 
                   className="w-full border p-2.5 rounded-md focus:outline-none"
+                  
                 />
+              </div>
+              <div className="flex gap-3 justify-end">  
+                <Button
+                    disabled={isUploading}
+                    onClick={() => discard()}
+                    className="px-10 py-2.5 mt-8 text-[16px]"
+                    variant={"destructive"}
+                >
+                  Descartar
+                </Button>
+                <Button
+                    disabled={isUploading}
+                    onClick={() => createNewPost()}
+                    className="px-10 py-2.5 mt-8 text-[16px]"
+                >
+                  {isUploading ? <BiLoader className="animate-spin" size={25}/> : "Criar anúncio"}
+                </Button>
               </div>
           </div>
         </div>
