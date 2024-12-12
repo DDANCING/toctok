@@ -19,3 +19,10 @@ export interface UploadError {
   type: string;
   message: string;
 }
+
+export interface CropperDimensions {
+  width?: number | null;
+  height?: number | null;
+  left?: number | null;
+  top?: number | null;
+}

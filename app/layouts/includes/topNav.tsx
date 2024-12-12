@@ -37,7 +37,7 @@ export default function TopNav({ user }: UserProps) {
     <>
       <div
         id="TopNav"
-        className="fixed bg-background z-30 flex items-center w-full h-[60px]"
+        className="fixed bg-background z-30 flex items-center justify-between w-full h-[60px]"
       >
         <div
           className={`flex items-center justify-between gap-6 w-full px-4 mx-auto ${
@@ -76,22 +76,11 @@ export default function TopNav({ user }: UserProps) {
         </div>
 
         </div>
-        {userId ? ( 
-        <div className="flex items-center gap-3">
-          <Button 
-          onClick={() => goTo()}
-          className="flex items-center border rounded-sm py-[6px] pl-1.5"
-          variant="outline"
-          >
-             <FaHouseChimneyMedical size="22"/>
-             <span className="px-2 font-medium text-[15px]">Novo</span>
-          </Button>
-        </div>
-        ) :(null)}
-
+       
         <div className="flex w-full justify-end p-4 z-10">
       
           {!userId ? (
+            
             <div className="flex ">
               <LoginButton mode="modal" asChild>
                 <Button
@@ -112,6 +101,16 @@ export default function TopNav({ user }: UserProps) {
             
           ) : (
             <div className="w-44 flex items-center gap-3">
+              <div className="flex items-center gap-3">
+          <Button 
+          onClick={() => goTo()}
+          className="flex items-center border rounded-sm py-[6px] pl-1.5"
+          variant="outline"
+          >
+             <FaHouseChimneyMedical size="22"/>
+             <span className="px-2 font-medium text-[15px]">Novo</span>
+          </Button>
+        </div>
               <ProfileOptions />
             </div>
           )}

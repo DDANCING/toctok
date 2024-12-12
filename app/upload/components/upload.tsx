@@ -7,13 +7,15 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { MdContentCut } from "react-icons/md";
 import { Input } from "@/components/ui/input";
+import { UploadError } from "@/app/types";
 
 
 export const Upload = () => {
   let [fileDisplay, setFileDisplay] = useState('');
   let [file, setFile] = useState<File | null>(null);
   let [isUploading, setIsUploading] = useState(false);
-  let [caption, setCaption] = useState(''); // Estado para a legenda
+  let [caption, setCaption] = useState('');
+  let [error, setError] = useState<UploadError | null>(null);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -157,6 +159,11 @@ export const Upload = () => {
                   {isUploading ? <BiLoader className="animate-spin" size={25}/> : "Criar anúncio"}
                 </Button>
               </div>
+              {error ? (
+                <div className="text-red-600 mt-4">
+                  {error.message}
+                </div>
+              ) : null}
           </div>
         </div>
       </div>

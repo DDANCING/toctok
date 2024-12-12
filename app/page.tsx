@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <MainLayout user={user}>
-      <main className="h-screen w-full overflow-y-auto snap-y snap-mandatory no-scrollbar py-16">
+      <main className="h-screen w-full overflow-y-auto snap-y  snap-mandatory no-scrollbar py-16">
         <ClientOnly>
           {videos.map((video) => (
             <div key={video.id} className="snap-center">

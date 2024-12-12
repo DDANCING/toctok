@@ -23,13 +23,22 @@ import { useSession } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
 import UrlTabs from "@/components/urltabs";
+import { useRouter } from "next/navigation";
+import { CropperDimensions } from "../types";
 
 const SettingsPage = () => {
+const [file, setFile] = useState<File | null>(null);
+const [cropper, setCropper] = useState<CropperDimensions | null>(null);
+const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+const [userImage, setUserImage] = useState<string | "">("");
+const [userBio, setUserBio] = useState<string | "">("")
 const [error, setError] = useState<string | undefined>(); 
 const [success, setSuccess] = useState<string | undefined>();   
+const [isUpdating, setIsUpdating] = useState(false);
 const [isPending, startTransition] = useTransition();
 const user =  useCurrentUser();
 const { update } = useSession();
+const router = useRouter();
 
 const form = useForm<z.infer<typeof SettingsSchema>>({
   resolver: zodResolver(SettingsSchema),
@@ -76,8 +85,8 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
 }
 
   return (
-    <main className=" flex rounded-sm h-full w-s justify-between bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] bg-background from-primary to-background">
-    <div className="flex h-full w-full md:w-[50%] bg-background">
+    <main className=" flex rounded-sm h-screen justify-between">
+    <div className="flex h-full w-full bg-background">
     <UrlTabs defaultValue="account">
       <TabsList className={cn(
         "grid w-full grid-cols-3",
@@ -122,6 +131,8 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             </FormItem>
             )}
               />
+
+              
               {user?.isOAuth === false &&(
               <FormField
               control={form.control}
