@@ -19,7 +19,7 @@ const profilePage = async ({ params }: Props) => {
     ? {
         id: getUser.id,
         name: getUser.name || "Usuário sem nome",
-        img: getUser.image || "/default-profile.png", // Substitua pelo caminho da imagem padrão
+        img: getUser.image || "/profile-default.svg", // Substitua pelo caminho da imagem padrão
         bio: getUser.bio || "Este usuário não possui uma biografia.",
         profile: {
           
@@ -27,7 +27,7 @@ const profilePage = async ({ params }: Props) => {
       }
     : {
         name: "Conta não encontrada",
-        img: "/default-profile.png",
+        img: "/profile-default.svg",
         bio: "",
       };
 

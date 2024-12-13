@@ -1,7 +1,9 @@
 "use client"
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaMapPin } from "react-icons/fa";
-import { RiLiveFill } from "react-icons/ri";
+import { IoSend } from "react-icons/io5";
+import { MdExplore, MdOutlineExplore } from "react-icons/md";
+import { RiUserFollowFill } from "react-icons/ri";
 
 
 interface MenuItemsTypes {
@@ -11,11 +13,13 @@ interface MenuItemsTypes {
 }
 
 export default function  MenuItem({ iconString, colorString, sizeString }: MenuItemsTypes) {
-
-  const icons = () => {
+ 
+  const icons = () => { 
+    if (iconString == 'Explorar') return <MdExplore size={sizeString} color={colorString}/>
     if (iconString == 'Sua localização') return <FaMapMarkerAlt size={sizeString} color={colorString}/>
-    if (iconString == 'Seguindo') return <FaMapPin size={sizeString} color={colorString}/>
-    if (iconString == 'LIVE') return <RiLiveFill size={sizeString} color={colorString}/>
+    if (iconString == 'Marcados') return <FaMapPin size={sizeString} color={colorString}/>
+    if (iconString == 'Seguindo') return <RiUserFollowFill size={sizeString} color={colorString}/>
+    if (iconString == 'Mensagens') return <IoSend size={sizeString} color={colorString}/>
   }
   return (
     <>

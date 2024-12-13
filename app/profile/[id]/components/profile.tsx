@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { BsPencilFill } from "react-icons/bs";
 import PostUser from "./post-user";
 import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerTrigger } from "@/components/ui/drawer";
-import SettingsPage from "@/app/settings/page";
+import Settings from "@/app/settings/settings";
 
 interface ProfileProps {
   userId: string;
@@ -52,7 +52,7 @@ export const Profile = ({ currentProfile, userId, post }: ProfileProps) => {
           <img
             className="w-[120px] min-w-[120px] rounded-full"
             alt={currentProfile.name}
-            src={currentProfile.img || "/default-profile.png"}
+            src={currentProfile.img || "/profile-default.svg"}
           />
         </ClientOnly>
 
@@ -77,7 +77,7 @@ export const Profile = ({ currentProfile, userId, post }: ProfileProps) => {
             </Button>
               </DrawerTrigger>
               <DrawerContent  className="w-[50%]">
-               <SettingsPage/>
+               <Settings/>
               </DrawerContent>
             </Drawer>
 
@@ -114,16 +114,16 @@ export const Profile = ({ currentProfile, userId, post }: ProfileProps) => {
       </div>
 
       {/* Abas de Conteúdo */}
-      <Tabs defaultValue="video" className="w-full mt-4">
+      <Tabs defaultValue="video" className="w-full mt-4 ">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger
-            className="font-bold border-b-2 border-transparent data-[state=active]:border-foreground"
+            className="bg-background font-bold border-b-2 border-transparent data-[state=active]:border-foreground"
             value="video"
           >
             Vídeos
           </TabsTrigger>
           <TabsTrigger
-            className="font-bold border-b-2 border-transparent data-[state=active]:border-foreground"
+            className="bg-background font-bold border-b-2 border-transparent data-[state=active]:border-foreground"
             value="pinned"
           >
             Marcados
@@ -132,22 +132,41 @@ export const Profile = ({ currentProfile, userId, post }: ProfileProps) => {
 
         {/* Conteúdo da Aba de Vídeos */}
         <TabsContent value="video">
-          <Card className="w-full">
-            <CardContent className="space-y-2">
-              <div className="mt-4 grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
-                {post.map((item) => (
+          <Card className="w-full bg-background">
+            <CardContent className="space-y-2 ">
+            
+              {post.length >= 1 ? (
+                    <div className="mt-4 grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
+                   {post.map((item) => (
                   <PostUser key={item.id} userId={userId} post={item} />
                 ))}
-              </div>
+                  </div>
+                ) : (
+                  <div >
+                    <p className="mt-4 text-muted-foreground">Usuario não tem conteúdo.</p>
+                  </div>
+                )}
+                
+             
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Conteúdo da Aba de Marcados */}
         <TabsContent value="pinned">
-          <Card>
-            <CardContent className="space-y-2">
-              <p className="text-muted-foreground">Nenhum conteúdo marcado.</p>
+          <Card className="w-full bg-background ">
+          <CardContent className="space-y-2">
+             
+                {!true ? (
+                    <div className=" mt-4 grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3">
+                  videos
+                  </div>
+                ) : (
+                  <div >
+                    <p className="mt-4 text-muted-foreground">Nenhum conteúdo marcado.</p>
+                  </div>
+                )}
+             
             </CardContent>
           </Card>
         </TabsContent>

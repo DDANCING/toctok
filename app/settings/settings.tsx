@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import UrlTabs from "@/components/urltabs";
 import { useRouter } from "next/navigation";
 import { CropperDimensions } from "../types";
+import { Moon } from "lucide-react";
 
 const SettingsPage = () => {
 const [file, setFile] = useState<File | null>(null);
@@ -60,8 +61,8 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
       toast(data.error, {
         
         action: {
-          label: "Close",
-          onClick: () => console.log("Undo"),
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
         },
       })
     }
@@ -72,14 +73,14 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
       toast(data.success, {
         
         action: {
-          label: "Close",
-          onClick: () => console.log("Undo"),
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
         },
       })
     }
     
    })
-   .catch(() => setError("Something went wrong!"));
+   .catch(() => setError("Algo deu errado!"));
    
   });
 }
@@ -93,18 +94,18 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
         user?.isOAuth !== false && "grid w-full grid-cols-3"
       )}
       >  
-        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="account">Conta</TabsTrigger>
         {user?.isOAuth === false &&(
-        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="password">Senha</TabsTrigger>
         )}
-        <TabsTrigger value="configs">Preferences</TabsTrigger>
+        <TabsTrigger value="configs">Preferências</TabsTrigger>
       </TabsList>
       <TabsContent value="account">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>Conta</CardTitle>
             <CardDescription>
-              Make changes to your account here. Click save when you re done.
+              Faça alterações na sua conta aqui. Clique em salvar quando terminar.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -120,7 +121,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="name"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Name </FormLabel>
+              <FormLabel> Nome </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -132,7 +133,6 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             )}
               />
 
-              
               {user?.isOAuth === false &&(
               <FormField
               control={form.control}
@@ -150,6 +150,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             </FormItem>
             )}
               />
+              
             )} 
               {user?.isOAuth === false && (
               <FormField
@@ -158,9 +159,9 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>  Two Factor Authentication  </FormLabel>
+                <FormLabel>  Autenticação em Duas Etapas  </FormLabel>
                 <FormDescription>
-                  Enable two factor authentication for your account
+                  Ative a autenticação em duas etapas para sua conta.
                 </FormDescription>
               </div>
               <FormControl>
@@ -176,20 +177,18 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
           )}
            </div>
            <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content"> 
-            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Save"}
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Salvar"}
            </Button>
             </form>
           </Form>
-          
           </CardContent>
           <CardFooter>
-           
           </CardFooter>
         </Card>
       </TabsContent>
       {user?.isOAuth === false &&(
       <TabsContent value="password">
-        
+      
       <Form {...form}>
             <form 
             className="space-y-6" 
@@ -200,11 +199,10 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
                 <>
               <FormField
               control={form.control}
-              
               name="password"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Password </FormLabel>
+              <FormLabel> Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -221,7 +219,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="newPassword"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> New Password </FormLabel>
+              <FormLabel> Nova Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -238,8 +236,8 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               </Card> 
               
            </div>
-           <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content"> 
-            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Charge your password"}
+           <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content ml-2"> 
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Alterar senha"}
            </Button>
             </form>
           </Form>
@@ -248,12 +246,15 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
       <TabsContent value="configs">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Preferences</CardTitle>
+            <CardTitle>Preferências</CardTitle>
             <CardDescription>
               
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
+            <div className="flex items-center gap-2">
+          <Moon size={18}/>  <h1> Modo escuro </h1>
+          </div>
            <ModeToggle/>
           </CardContent>
           <CardFooter>
