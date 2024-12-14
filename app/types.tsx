@@ -3,6 +3,10 @@ export interface Pin {
   user_id: string;
   post_id: string;
 }
+export interface User {
+  image: string; 
+ 
+}
 
 export interface Comments {
   id: string;
@@ -10,10 +14,6 @@ export interface Comments {
   post_id: string;
   text: string;
   created_at: string;
-}
-export interface UploadError {
-  type: string;
-  message: string;
 }
 export interface UploadError {
   type: string;

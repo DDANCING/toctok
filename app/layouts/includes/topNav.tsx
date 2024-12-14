@@ -108,7 +108,9 @@ export default function TopNav({ user }: UserProps) {
           variant="outline"
           >
              <FaHouseChimneyMedical size="22"/>
+             <Link href={"/upload"}>
              <span className="px-2 font-medium text-[15px]">Novo</span>
+             </Link>
           </Button>
         </div>
               <ProfileOptions />

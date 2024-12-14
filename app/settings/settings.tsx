@@ -28,18 +28,12 @@ import { CropperDimensions } from "../types";
 import { Moon } from "lucide-react";
 
 const SettingsPage = () => {
-const [file, setFile] = useState<File | null>(null);
-const [cropper, setCropper] = useState<CropperDimensions | null>(null);
-const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-const [userImage, setUserImage] = useState<string | "">("");
-const [userBio, setUserBio] = useState<string | "">("")
 const [error, setError] = useState<string | undefined>(); 
 const [success, setSuccess] = useState<string | undefined>();   
-const [isUpdating, setIsUpdating] = useState(false);
 const [isPending, startTransition] = useTransition();
 const user =  useCurrentUser();
 const { update } = useSession();
-const router = useRouter();
+
 
 const form = useForm<z.infer<typeof SettingsSchema>>({
   resolver: zodResolver(SettingsSchema),

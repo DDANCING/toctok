@@ -69,3 +69,45 @@ export const getVideos = async (
     throw new Error("Erro ao carregar vídeos.");
   }
 };
+
+/**
+ * Recupera um post com base no ID fornecido.
+ * @param postId - O ID do post a ser recuperado.
+ * @returns O post correspondente ao ID, incluindo informações do proprietário.
+ */
+export const getPostById = async (postId: string) => {
+  try {
+    // Validação do parâmetro
+    if (!postId) {
+      throw new Error("O parâmetro 'postId' é obrigatório.");
+    }
+
+    // Consulta ao banco de dados
+    const post = await db.listing.findUnique({
+      where: {
+        id: postId,
+      },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    // Verifica se o post foi encontrado
+    if (!post) {
+      throw new Error(`Post com ID ${postId} não encontrado.`);
+    }
+
+    return post;
+  } catch (error) {
+    console.error("Erro ao buscar o post:", error);
+    throw new Error("Não foi possível recuperar o post. Tente novamente mais tarde.");
+  }
+};
+
+     
