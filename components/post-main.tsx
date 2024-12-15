@@ -136,11 +136,15 @@ export default function PostMain({ post }: PostProps) {
             <div className="flex justify-between">
               <Link href={`/profile/${post.profile.user_id}`}>
                 <div className="flex items-center mb-2">
+                  {post.profile.image ? (
                   <img
                     className="rounded-full w-10 h-10 object-cover border border-white"
                     src={post.profile.image}
                     alt={post.profile.name}
                   />
+                  ) : (
+                    <img className="rounded-full lg:mx-0 mx-auto w-10 h-10" src="/profile-default.svg" />
+                  )}
                   <span className="ml-2 font-bold hover:underline">
                     {post.profile.name}
                   </span>

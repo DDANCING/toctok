@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AiOutlineClose } from "react-icons/ai";
 
 interface PostPageLayoutProps {
-  params: { userId: string; postId: string };
+  params: { ownerId: string; postId: string };
   children: React.ReactNode;
 }
 

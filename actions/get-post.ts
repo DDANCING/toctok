@@ -1,4 +1,5 @@
 "use server";
+import { PostWithProfile } from "@/app/types";
 import { db } from "@/lib/db";
 
 /**
@@ -70,12 +71,13 @@ export const getVideos = async (
   }
 };
 
+
 /**
  * Recupera um post com base no ID fornecido.
  * @param postId - O ID do post a ser recuperado.
- * @returns O post correspondente ao ID, incluindo informações do proprietário.
+ * @returns O post correspondente ao ID no formato PostWithProfile.
  */
-export const getPostById = async (postId: string) => {
+export const getPostById = async (postId: string): Promise<PostWithProfile> => {
   try {
     // Validação do parâmetro
     if (!postId) {
@@ -103,11 +105,25 @@ export const getPostById = async (postId: string) => {
       throw new Error(`Post com ID ${postId} não encontrado.`);
     }
 
-    return post;
+    // Mapeia os dados para o formato PostWithProfile
+    const formattedPost: PostWithProfile = {
+      id: post.id,
+      video_url: post.videoUrl,
+      text: post.title,
+      created_at: post.createdAt,
+      locale: post.location,
+      latitude: post.latitude,
+      longitude: post.longitude,
+      profile: {
+        user_id: post.owner.id,
+        name: post.owner.name || "",
+        image: post.owner.image || "",
+      },
+    };
+
+    return formattedPost;
   } catch (error) {
     console.error("Erro ao buscar o post:", error);
     throw new Error("Não foi possível recuperar o post. Tente novamente mais tarde.");
   }
 };
-
-     

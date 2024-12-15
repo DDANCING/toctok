@@ -1,5 +1,6 @@
 "use client";
 
+import { PostWithProfile } from "@/app/types";
 import ClientOnly from "@/components/client-only";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -9,11 +10,11 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoPause, IoPlay, IoVolumeHighOutline, IoVolumeMuteOutline } from "react-icons/io5";
 
 interface VideoSectionProps {
-  postId: string;
-  userId: string;
+  post: PostWithProfile;
+  ownerId: string;
 }
 
-export default function VideoSection({ postId, userId }: VideoSectionProps) {
+export default function VideoSection({ post, ownerId }: VideoSectionProps) {
   const [isMutedGlobal, setIsMutedGlobal] = useState(true);
   const [showPlayPauseIcon, setShowPlayPauseIcon] = useState<"play" | "pause" | null>(null);
 
@@ -26,7 +27,7 @@ export default function VideoSection({ postId, userId }: VideoSectionProps) {
   };
 
   const handleVideoClick = () => {
-    const video = document.getElementById(`video-${postId}`) as HTMLVideoElement;
+    const video = document.getElementById(`video-${post.id}`) as HTMLVideoElement;
     if (video) {
       if (video.paused) {
         video.play();
@@ -50,10 +51,10 @@ export default function VideoSection({ postId, userId }: VideoSectionProps) {
   return (
     <div className="lg:w-[calc(100%-540px)] h-full relative">
       <Link
-        className="absolute text-foreground z-20 m-5 rounded-full bg-muted p-1.5 hover:bg-muted/50"
-        href={`/profile/${userId}`}
+        className="absolute flex items-center justify-center text-foreground z-20 m-5 w-14 h-14 rounded-full bg-muted p-1.5 hover:bg-muted/50 "
+        href={`/profile/${ownerId}`}
       >
-        <AiOutlineClose size={25} />
+        <AiOutlineClose size={30} />
       </Link>
       <div className="relative h-full">
         <Button
@@ -82,8 +83,8 @@ export default function VideoSection({ postId, userId }: VideoSectionProps) {
             <div className="relative z-10 bg-black bg-opacity-70 lg:min-w-[480px] backdrop-blur-md">
               <video
                 onClick={handleVideoClick}
-                id={`video-${postId}`}
-                src="https://utfs.io/f/k0NLSQp2ETZAnR2bQ6icZ4RlwNHdgQPci2MBtWFa73xO5qkb"
+                id={`video-${post.id}`}
+                src={post.video_url}
                 muted={isMutedGlobal}
                 loop
                 className="h-screen mx-auto"

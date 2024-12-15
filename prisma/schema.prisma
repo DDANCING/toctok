@@ -26,6 +26,8 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   listings              Listing[] // Relacionamento com os anúncios
   UserHistory           UserHistory[]
+  Comment               Comment[]
+  Message               Message[]
 }
 
 model Account {
@@ -99,6 +101,33 @@ model Listing {
   ownerId     String
   owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   histories   UserHistory[] @relation(name: "ListingToUserHistory") // Relacionamento 1:N com UserHistory
+  Comment     Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId String
+  post   Listing @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([postId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  content    String
+  createdAt  DateTime @default(now())
+
+  receiver User @relation(fields: [receiverId], references: [id])
 }
 
 model UserHistory {
