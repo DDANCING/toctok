@@ -1,93 +1,105 @@
-"use client";
+"use client"
 
-import React, { useState, useTransition } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { SettingsSchema } from "@/schemas";
 import { settings } from "@/actions/settings";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTransition, useState } from "react";
 import { Input } from "@/components/ui/input";
+
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
 import { useCurrentUser } from "@/data/hooks/use-current-user";
+
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SyncLoader } from "react-spinners";
 import { toast } from "sonner";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import UrlTabs from "./urltabs";
-import { ModeToggle } from "./ui/mode-toggle";
+import { Switch } from "@/components/ui/switch";
+import { useSession } from "next-auth/react";
+
 import { cn } from "@/lib/utils";
-import { Drawer } from "./ui/drawer";
+import UrlTabs from "@/components/urltabs";
+import { useRouter } from "next/navigation";
+import { CropperDimensions } from "../types";
+import { Moon } from "lucide-react";
 
-const SettingsDrawer = () => {
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const [isPending, startTransition] = useTransition();
-  const user = useCurrentUser();
+const SettingsPage = () => {
+const [error, setError] = useState<string | undefined>(); 
+const [success, setSuccess] = useState<string | undefined>();   
+const [isPending, startTransition] = useTransition();
+const user =  useCurrentUser();
+const { update } = useSession();
 
-  const form = useForm<z.infer<typeof SettingsSchema>>({
-    resolver: zodResolver(SettingsSchema),
-    defaultValues: { 
-      password: undefined,
-      newPassword: undefined,
-      name: user?.name || undefined,
-      email: user?.email || undefined,
-      isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
-    },
+
+const form = useForm<z.infer<typeof SettingsSchema>>({
+  resolver: zodResolver(SettingsSchema),
+  defaultValues: {
+    password: undefined,
+    newPassword: undefined,
+    name: user?.name || undefined,
+    email: user?.email || undefined,
+    isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
+  }
+});
+
+const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
+   startTransition(() => {
+   settings(values)
+   .then((data) => {
+    if (data.error) {
+      setError(data.error)
+      toast(data.error, {
+        
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
+        },
+      })
+    }
+
+    if (data.success) {
+      update(); 
+      setSuccess(data.success);
+      toast(data.success, {
+        
+        action: {
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
+        },
+      })
+    }
+    
+   })
+   .catch(() => setError("Algo deu errado!"));
+   
   });
-
-  const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
-    startTransition(() => {
-      settings(values)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
-            toast(data.error, {
-              action: {
-                label: "Close",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          }
-
-          if (data.success) {
-            setSuccess(data.success);
-            toast(data.success, {
-              action: {
-                label: "Close",
-                onClick: () => console.log("Undo"),
-              },
-            });
-          }
-        })
-        .catch(() => setError("Something went wrong!"));
-    });
-  };
+}
 
   return (
-    <Drawer>
-      <main className=" flex rounded-sm h-full w-s justify-between bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] bg-background from-primary to-background">
-    <div className="flex h-full w-full md:w-[50%] bg-background">
+    <main className=" flex rounded-sm h-screen justify-between">
+    <div className="flex h-full w-full bg-background">
     <UrlTabs defaultValue="account">
       <TabsList className={cn(
         "grid w-full grid-cols-3",
         user?.isOAuth !== false && "grid w-full grid-cols-3"
       )}
       >  
-        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="account">Conta</TabsTrigger>
         {user?.isOAuth === false &&(
-        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="password">Senha</TabsTrigger>
         )}
-        <TabsTrigger value="configs">Preferences</TabsTrigger>
+        <TabsTrigger value="configs">Preferências</TabsTrigger>
       </TabsList>
       <TabsContent value="account">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>Conta</CardTitle>
             <CardDescription>
-              Make changes to your account here. Click save when you re done.
+              Faça alterações na sua conta aqui. Clique em salvar quando terminar.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -103,7 +115,7 @@ const SettingsDrawer = () => {
               name="name"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Name </FormLabel>
+              <FormLabel> Nome </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -114,6 +126,7 @@ const SettingsDrawer = () => {
             </FormItem>
             )}
               />
+
               {user?.isOAuth === false &&(
               <FormField
               control={form.control}
@@ -131,6 +144,7 @@ const SettingsDrawer = () => {
             </FormItem>
             )}
               />
+              
             )} 
               {user?.isOAuth === false && (
               <FormField
@@ -139,9 +153,9 @@ const SettingsDrawer = () => {
               render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>  Two Factor Authentication  </FormLabel>
+                <FormLabel>  Autenticação em Duas Etapas  </FormLabel>
                 <FormDescription>
-                  Enable two factor authentication for your account
+                  Ative a autenticação em duas etapas para sua conta.
                 </FormDescription>
               </div>
               <FormControl>
@@ -157,20 +171,18 @@ const SettingsDrawer = () => {
           )}
            </div>
            <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content"> 
-            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Save"}
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Salvar"}
            </Button>
             </form>
           </Form>
-          
           </CardContent>
           <CardFooter>
-           
           </CardFooter>
         </Card>
       </TabsContent>
       {user?.isOAuth === false &&(
       <TabsContent value="password">
-        
+      
       <Form {...form}>
             <form 
             className="space-y-6" 
@@ -181,11 +193,10 @@ const SettingsDrawer = () => {
                 <>
               <FormField
               control={form.control}
-              
               name="password"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Password </FormLabel>
+              <FormLabel> Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -202,7 +213,7 @@ const SettingsDrawer = () => {
               name="newPassword"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> New Password </FormLabel>
+              <FormLabel> Nova Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -219,8 +230,8 @@ const SettingsDrawer = () => {
               </Card> 
               
            </div>
-           <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content"> 
-            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Charge your password"}
+           <Button variant={"outline"} disabled={isPending} type="submit" className="flex box-content ml-2"> 
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Alterar senha"}
            </Button>
             </form>
           </Form>
@@ -229,12 +240,15 @@ const SettingsDrawer = () => {
       <TabsContent value="configs">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle>Preferences</CardTitle>
+            <CardTitle>Preferências</CardTitle>
             <CardDescription>
               
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
+            <div className="flex items-center gap-2">
+          <Moon size={18}/>  <h1> Modo escuro </h1>
+          </div>
            <ModeToggle/>
           </CardContent>
           <CardFooter>
@@ -256,8 +270,6 @@ const SettingsDrawer = () => {
     </div>
     </div>
     </main>
-    </Drawer>
-  );
-};
+  )}
 
-export default SettingsDrawer;
+export default SettingsPage;

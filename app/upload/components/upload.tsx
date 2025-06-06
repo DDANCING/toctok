@@ -7,13 +7,18 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { MdContentCut } from "react-icons/md";
 import { Input } from "@/components/ui/input";
-
+import { UploadError } from "@/app/types";
+import { LatLng } from "leaflet";
+import MapSection from "./map";
 
 export const Upload = () => {
-  let [fileDisplay, setFileDisplay] = useState('');
+  let [fileDisplay, setFileDisplay] = useState("");
   let [file, setFile] = useState<File | null>(null);
   let [isUploading, setIsUploading] = useState(false);
-  let [caption, setCaption] = useState(''); // Estado para a legenda
+  let [caption, setCaption] = useState("");
+  let [error, setError] = useState<UploadError | null>(null);
+  const [location, setLocation] = useState<LatLng | null>(null);
+  const [address, setAddress] = useState("");
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -25,25 +30,43 @@ export const Upload = () => {
       setFile(file);
     }
   };
+
   const discard = () => {
-    setFileDisplay('');
+    setFileDisplay("");
     setFile(null);
-    setCaption('');
+    setCaption("");
+    setLocation(null);
+    setAddress("");
   };
 
-
   const clearVideo = () => {
-    setFileDisplay('');
+    setFileDisplay("");
     setFile(null);
   };
 
   const createNewPost = () => {
-    console.log("createNewPost")
-  }
+    console.log("createNewPost");
+  };
+
+  const fetchLatLngFromAddress = async () => {
+    try {
+      if (!address) return;
+      const response = await fetch(`https://api.locationiq.com/v1/autocomplete.php?key=YOUR_API_KEY&q=${address}&format=json`);
+      const data = await response.json();
+
+      if (data && data[0]) {
+        setLocation(new LatLng(parseFloat(data[0].lat), parseFloat(data[0].lon)));
+      } else {
+        throw new Error("Endereço não encontrado.");
+      }
+    } catch (err) {
+      setError({ type: "fetchError", message: (err as Error).message });
+    }
+  };
 
   return (
     <>
-      <div className="w-full mt-[80px] mb-[40px] bg-background shadow-lg rounded-md py-6 md:px-10 px-4">
+      <div className="w-full  mt-[80px] mb-[40px] bg-background shadow-lg rounded-md py-6 md:px-10 px-4">
         <div>
           <h1 className="text-[23px] font-semibold">Criar Anúncio</h1>
           <h2 className="text-muted-foreground mt-1">
@@ -107,7 +130,7 @@ export const Upload = () => {
             </div>
           )}
           
-          <div className="mt-4 mb-6">
+          <div className="mt-4 mb-6 flex flex-col overflow-y-auto no-scrollbar h-[60vh]">
             <div className="flex bg-muted py4 px-6 border p-1 shadow-xl">
               <div>
                 <div>
@@ -137,15 +160,34 @@ export const Upload = () => {
                   value={caption} 
                   onChange={(e) => setCaption(e.target.value)} 
                   className="w-full border p-2.5 rounded-md focus:outline-none"
-                  
                 />
+         <div>
+         <div className="flex items-center justify-between">
+                  <div className="mb-1 text-[15px]"> Endereço </div>
+                  <div className="text-muted-foreground text-[12px]"> 0/150 </div>
+                </div>
+                <Input
+                  type="text"
+                  maxLength={150}
+                  className="w-full border p-2.5 rounded-md focus:outline-none"
+                />
+         <MapSection 
+           address={address} 
+           location={location} 
+           setAddress={setAddress} 
+           setLocation={setLocation} 
+           fetchLatLngFromAddress={fetchLatLngFromAddress} 
+         />
+         </div>
+        </div>
+      </div>
               </div>
               <div className="flex gap-3 justify-end">  
                 <Button
                     disabled={isUploading}
                     onClick={() => discard()}
                     className="px-10 py-2.5 mt-8 text-[16px]"
-                    variant={"destructive"}
+                    variant={"outline"}
                 >
                   Descartar
                 </Button>
@@ -157,9 +199,12 @@ export const Upload = () => {
                   {isUploading ? <BiLoader className="animate-spin" size={25}/> : "Criar anúncio"}
                 </Button>
               </div>
+              {error ? (
+                <div className="text-red-600 mt-4">
+                  {error.message}
+                </div>
+              ) : null}
           </div>
-        </div>
-      </div>
     </>
   );
 };

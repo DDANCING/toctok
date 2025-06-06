@@ -10,6 +10,8 @@ import { FaChevronDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { getUserHistory } from "@/actions/history";
 
+
+
 // Define o tipo para `user` e `userId`
 type UserProps = {
   user: {
@@ -90,26 +92,38 @@ export default function SideNavMain({ user }: UserProps) {
     <>
       <div
         id="SideNavMain"
-        className={`fixed left-0 z-20 bg-background pt-[70px] h-full w-[75px] overflow-auto 
+        className={`fixed left-0 z-20 bg-background pt-[70px] h-full w-[75px] overflow-auto no-scrollbar
           ${pathname === "/" ? "lg:w-[320px]" : "lg:w-[230px]"}`}
       >
         <div className="lg:w-full w-[55px] mx-auto ">
-          <Link href="/">
+        <Link href="/">
             <MenuItem
-              iconString="Sua localização"
+              iconString="Explorar"
               colorString={pathname === "/" ? "#22c55e" : ""}
               sizeString="25"
             />
           </Link>
+          <Link href="/">
+            <MenuItem
+              iconString="Sua localização"
+              colorString={pathname === "/locale" ? "#22c55e" : ""}
+              sizeString="25"
+            />
+          </Link>
           <MenuItem
-            iconString="Seguindo"
-            colorString={pathname === "/" ? "muted" : ""}
+            iconString="Marcados"
+            colorString={pathname === "/pinned" ? "#22c55e" : ""}
             sizeString="25"
           />
           <MenuItem
-            iconString="LIVE"
-            colorString={pathname === "/" ? "muted" : ""}
+            iconString="Seguindo"
+            colorString={pathname === "/following" ? "#22c55e" : ""}
             sizeString="25"
+          />
+          <MenuItem
+            iconString="Mensagens"
+            colorString={pathname === "/direct" ? "#22c55e" : ""}
+            sizeString="23"
           />
           {user && (
             <div>

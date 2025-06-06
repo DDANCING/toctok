@@ -1,23 +1,18 @@
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { UploadError } from "../types";
+
 import UploadLayout from "../layouts/uploadLayout";
 import { auth } from "@/auth";
 import { Upload } from "./components/upload";
 
+const UploadPage = async () => {
 
-const uploadPage = async () => {
-  const user = await auth()
+  const user = await auth();
 
-  
 
-  
-return (
-
-    <UploadLayout  user={user}>
-    <Upload />
+  return (
+    <UploadLayout user={user}>
+      <Upload   />
     </UploadLayout>
-
-)
+  );
 }
-export default uploadPage;
+
+export default UploadPage;

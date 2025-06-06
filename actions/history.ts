@@ -44,8 +44,6 @@ export const getUserHistory = async (userId: string, skip: number = 0, take: num
       },
     });
 
-    console.log("[GET_USER_HISTORY] Histórico carregado:", history);
-
     // Verifica duplicações locais (opcional, para debug)
     const uniqueHistory = history.filter(
       (item, index, self) => self.findIndex((h) => h.id === item.id) === index
